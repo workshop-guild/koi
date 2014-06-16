@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<script>
+	if( typeof(WebSocket) != "function" ) {
+		console.log("Websockets are not supported for this Browser version yet");
+		alert("Websockets are not supported for this Browser Please use Google Chrome");
+	}
+
+	// check for notifications support
+	// you can omit the 'window' keyword
+	if (Notification) {
+		console.log("Notifications are supported!");
+	}
+	else {
+		console.log("Notifications are not supported for this Browser/OS version yet.");
+		alert("Notifications are not supported for your Browser. Please use Google Chrome");
+	}
+</script>
+	<head>
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+		<META HTTP-EQUIV="Expires" CONTENT="-1">
+		<title>Koi Chat</title>
+		<!-- css -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		
+		<style type="text/css">
+		 <!-- BODY {background:none transparent;}-->
+		 </style>		
+		<!-- external scripts -->
+		<script src="js/jquery-1.10.1.min.js"></script>
+		<script src="js/bootstrap/bootstrap.js"></script>
+		<!-- custom scripts -->
+		<script defer src="js/chat.js"></script>
+		<!-- chat style -->
+		<style>
+				table {border-collapse:collapse; table-layout:fixed;}
+				table td {width:100px; word-wrap:break-word;}
+		</style>
+		</head>
+	<body>
+	<!--  <div id="clickme">
+		Click here
+	</div> -->
+	<div id='banner'><h1>Koi Chat</h1></div>
+
+	<div class="container">
+			<button href='#' class="btn btn-default" id='show_button'>Allow Notification</button>
+			<div class="row">
+				<div class="col-md-6">
+					<ul id='channel-tab' class="nav nav-tabs">
+					 <!--   <li><a href="index.php" data-toggle="tab">Home</a></li> -->
+					</ul>
+				</div>
+				<div id='channel-content' class="tab-content">
+					<div class="tab-pane fade in active" id="global">
+						<div class="col-md-6">
+							<div id='chattable' style="height: 400px; overflow: auto">
+								<table class="table table-condensed table-hover" id="chatarea">
+								</table>
+							</div>
+							<div class="col-md-12">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button id='select-curr' type="button" class="btn btn-default">Global</button>
+										<button id='select-caret' type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+										<ul id='select-user' class="dropdown-menu">
+											<li><a href="#">Global</a></li>
+											<li><a href="#">Whisper</a></li>
+										</ul>
+									</div> <!-- /input-group-btn -->
+									<input type="text" id="chatinput" class="form-control">
+									<span class="input-group-btn">
+										<button id='chatsend' class="btn btn-default" type="button">Send</button>
+									</span>
+								</div><!-- /input-group -->
+							</div>
+							<div class="col-md-12">
+								<div class="checkbox">
+										<label data-toggle="tooltip" data-placement="right" title="Do not store whisper history">
+											<input id='id_privacy' type="checkbox" checked='checked' value="privacy">
+											Fog of War
+										</label>
+									</div>
+							</div>
+							<!-- <div class="input-prepend">
+								<input class="span4" id="chatinput" type="text">
+								<button id='chatsend' class="btn btn-medium" type="button">Chat!</button>
+							</div> -->
+						</div>
+						<h4>Online</h4>
+						<div class="col-md-4" style="height: 400px; overflow: auto">
+							<table class="table table-bordered table-condensed" id="chatusers">
+							</table>
+						</div>
+					</div> <!-- Global Tab Pane -->
+
+					</div>
+				</div> <!-- Tab Content -->
+			</div> <!-- Row -->
+		</div>
+	</body>
+</html>

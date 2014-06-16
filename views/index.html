@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+    <head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">		
+			<title>Koi Cafe</title>
+			<!-- jquery -->
+			<script src="js/jquery-1.10.1.min.js"></script>
+			<!-- bootstrap -->
+			<link href="css/bootstrap.css" rel="stylesheet">
+			<link href="css/bootstrap-responsive.css" rel="stylesheet">
+			<script src="js/bootstrap/bootstrap.js"></script>
+			<script src="js/bootstrap/bootbox.min.js"></script>
+			<!-- custom css -->
+			<link href="css/custom.css" rel="stylesheet">
+			<link rel="icon" href="src/img/icon.ico" />
+			<!-- custom scripts -->
+			<script defer src="js/main.js"></script>
+		<script>
+        </script>
+    </head>
+    <body>
+		<div id="mainKoiPage" style ="position:absolute;z-index:1">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="span12">
+						<div class="hero-unit">
+							<h2>Koi Cafe</h2>
+							<h3>ようこそ  さん！</h3>
+							<h4 style="font-family:arial; font-size:20px; text-align:right;">             Fridays are Koi Days</h4>
+							<h4 style="font-family:arial; font-size:12px; text-align:right;">          	- Koi-lluminati</h4>
+						</div>
+					</div>
+					<div class="span12 navbar">
+						<div class="navbar-inner">
+							<ul class="nav">
+								<li class="active">
+									<a href="#">Home</a>
+								</li>
+								<li><a href="#">Menu</a></li>
+								<li><a href="#">Ranking</a></li>
+								<li><a href="#">Sugar Ranking</a></li>
+								<li><a href="#">Drink Ranking</a></li>
+								<li><a href="#">About</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+      
+      <div class="alert alert-dismissable" id="order_alert" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <div id="order_alert_content"></div>
+      </div>
+            <div class="row content" id="home_content">
+                <div class="span9" id="sidebar-content">
+					<h3>Order Form</h3>
+					<div class="span6 offset2" id="sidebar-content">
+						<ul class="thumbnails">
+							<li class="span2">
+								<a href="#" class="thumbnail">
+									<img class="img-responsive" id='curr-drink-img' src="http://placehold.it/180x180" alt="">
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<form id="order_form" class="form-horizontal" method="POST" action="post_order_ajax.php">
+						<div class="control-group">
+							<label class="control-label" for="order_drink">Drink</label>
+							<div class="controls">
+								<select name='drink' id="order_drink">
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="order_size">Size</label>
+							<div class="controls">
+								<select name='size' id="order_size">
+									<option value='0'>Medium</option>
+									<option value='1'>Large</option>
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="order_sugar">Sugar</label>
+							<div class="controls">
+								<select name='sugar' id="order_sugar">
+									<option value='0'>100</option>
+									<option value='1'>70</option>
+									<option value='2'>50</option>
+									<option value='3'>25</option>
+									<option value='4'>0</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="ice_level">Ice Level</label>
+							<div class="controls">
+								<select name='form_ice_level' id="select_ice_level">
+									<option value='0' selected="selected">Normal Ice</option>
+									<option value='1'>Less Ice</option>
+									<option value='2'>No Ice</option>
+									<option value='3'>More Ice</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="pearl_level">Pearl level</label>
+							<div class="controls">
+								<select name='form_pearl_level' id="select_pearl_level">
+									<option value='0'>Normal Pearl</option>
+									<option value='1'>Less Pearl</option>
+									<option value='2' selected="selected">No Pearl</option>
+									<option value='3'>More Pearl</option>
+								</select>
+							</div>
+						</div>
+					<input class="btn btn-primary offset2" type="submit" value="Confirm Order">
+					</form>
+					<h3>Current Orders</h3>
+					<h4 id="total"></h4>
+					<table class="table table-striped table-bordered table-condensed" id="current_orders">
+						<thead>
+						  <tr>
+							<th>Name</th>
+							<th>Drink</th>
+							<th>Size</th>
+							<th>Price</th>
+							<th>Sugar %</th>
+							<th>Pearl</th>
+							<th>Ice</th>
+							<th>Date</th>
+						  </tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+                </div>
+
+                <div class="span3" id="main-content">
+					<iframe src='http://10.25.15.90/koi/chat.php' style="border: 0; width:400px; height:1000px;"></iframe>
+
+                </div>
+            </div>
+
+			<div class="row content span6" id="menu_content">
+			<h3>Drink Menu</h3>
+				<table class="table table-striped table-bordered table-condensed" id="drink_menu">
+					<thead>
+					  <tr>
+						<th>Name</th>
+						<th>Medium</th>
+						<th>Large</th>
+					  </tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+            <div class="row content" id="ranking_content">
+				<div class="span6" id="sidebar-content">
+					<h3>Top Spenders</h3>
+					<table class="table table-striped table-bordered table-condensed" id="rank_menu">
+						<thead>
+						  <tr>
+							<th>Rank</th>
+							<th>Name</th>
+							<th>Amount</th>
+						  </tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			 <div class="row content" id="ranking_sugar_content">
+				<div class="span6" id="sidebar-content">
+					<h3>Koi Poisoning</h3>
+					<table class="table table-striped table-bordered table-condensed" id="rank_sugar_menu">
+						<thead>
+						  <tr>
+							<th>Rank</th>
+							<th>Name</th>
+							<th>Sugar Toxicity</th>
+							<th>Sugar Frenzy</th>
+						  </tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			 <div class="row content" id="ranking_drink_content">
+				<div class="span6" id="sidebar-content">
+					<h3>Most Favorite Drinks</h3>
+					<table class="table table-striped table-bordered table-condensed" id="ranking_drink_menu">
+						<thead>
+						  <tr>
+							<th>Rank</th>
+							<th>Drink</th>
+							<th>Total Orders</th>
+						  </tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+            <div class="row content" id="about_content">
+				<div class="span6" id="sidebar-content">
+					<h3>About the Koi Club</h3>
+					<p>The Koi Club is founded by Kenn and Eric</p>
+					<p>We wish to serve you Koi to make your days happy and delightful</p><br>
+					<p>Koi page is open for orders everyday as long as we are in office, last order by 1:45pm</p>
+					<p>Orders usually come at about 3-4pm</p><br>
+					<p>Unfortunately, Company does not sponsor the Koi club financially. Please push for it. Thanks.</p><br>
+					<p>&nbsp &nbsp &nbsp &nbsp Yours Truly, King Koi.</p>
+					<br><br><br><br>
+					<p><h3>Active Developers</h3></p>
+					<div class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="res/general_kenn.png" alt="res/kt80x80.jpg">
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading">Kenn</h4>
+							The Koi King
+						</div>
+					</div>
+					<div class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="res/general_eric.png" alt="res/kt80x80.jpg">
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading">Eric</h4>
+						</div>
+					</div>
+					<div class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="res/general_leon.png" alt="res/kt80x80.jpg">
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading">Leon</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+
+        </div>
+        </div>
+    </body>
+</html>

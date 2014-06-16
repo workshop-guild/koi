@@ -1,0 +1,25 @@
+name,medium_price,large_price,is_medium,is_pearl
+"Peach Macchiato",3.2, 4.5,0,0 
+"Passion Fruit Macchiato",3.2, 4.5,0,0 
+"Mango Macchiato",3.2, 4.5,0,0 
+"Grass Jelly Milk Tea",3.5, 5.0,0,1 
+"IceCream Milk tea",3.2, 4.5,0,1 
+"Honey Milk Tea",3.2, 4.5,0,1 
+"Green Tea Machiato",2.4, 3.5,0,0 
+"Black Tea Machiato",2.4, 3.5,0,0
+"Honey Juice",2.4, 3.5,0,1 
+"Green Milk Tea",2.8, 4.0,0,1 
+"Milk Tea",2.8, 4.0, 0,1
+"Hazelnut Milk Tea",3.2, 4.5,0,1 
+"Chocolate Milk Tea",3.2, 4.5, 0,1
+"Passion Ai Yu",3.6, 5.3, 0,1
+"Honey Green Tea",2.9, 4.3, 0,1
+"Green Tea With Grass Jelly",2.9, 4.3,0,1 
+"Café Macchiato(Medium)",3.2, 3.2, 1,0
+"Ice Cream Café Latte",4.0, 4.0, 0,1
+"KOI Café HOT!",2.1, 3.0, 0,0
+"Yakult Green Tea",3.2, 4.5, 0,1
+"Honey Green Tea",2.9, 4.3, 0,1
+"Café Mocha HOT!",2.9, 4.3, 0,0
+"Caramel Macchiato HOT!",2.9, 4.3,0,0 
+"Cappuccino HOT!",2.4, 3.5, 0,0
