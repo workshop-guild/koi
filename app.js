@@ -30,14 +30,21 @@ mongodb.connect('mongodb://localhost:27017/koi', function(err, db) {
     app.use(bodyParser.json());       // to support JSON-encoded bodies
     app.use(bodyParser.urlencoded()); // to support URL-encoded bodies   
     
-    app.get('/koi/orders', function (req, res) {
+    app.get('/koi/orders/current', function (req, res) {
         
         console.log(req.params.drink);     
         console.log(req.query);     
-        console.log('some request');
-
+        console.log('Get Current Orders of the day');
         
-        res.send(req.query);
+        var orders = db.collection('orders');
+        
+        orders.find( {}, {}, function (err, cursor) {
+            cursor.toArray (function(err, docs) {
+                 res.send(JSON.stringify(docs));
+            });
+        });
+        
+       
     });
     
     app.get('/koi/menu', function (req, res) {
@@ -45,22 +52,53 @@ mongodb.connect('mongodb://localhost:27017/koi', function(err, db) {
         var s_drinks = db.collection("s_drinks");
         
         s_drinks.find( {}, {}, function (err, cursor) {
-            console.dir(cursor);
             cursor.toArray (function(err, docs) {
-               console.log(docs); 
+                console.log('send drinks menu');
                 res.send(JSON.stringify(docs));
             });
         });
         
     });
     
-    app.post('/koi/order', function (req, res) {
+    var ICE_LEVEL   = [ 'Normal Ice', 'Less Ice', 'No Ice', 'More Ice' ];
+    var PEARL_LEVEL = [ 'Normal Pearl', 'Less Pearl', 'No Pearl', 'More Ice' ];
+    
+    app.post('/koi/order/send', function (req, res) {
         console.log(req.ips);   
         console.log(req.body);    
         console.log('posting order');
 
+        var post = req.body;
+        var orders = db.collection('orders');
+        var s_drinks = db.collection('s_drinks');
         
-        res.send({ 'post-data' : 'some post payload'});
-    });    
+        s_drinks.find( {}, {}, function (err, cursor) {
+            cursor.toArray (function(err, docs) {
+                console.log('Ordering drinks');
+                
+                var playername = 'person';
+                var drink_id = post['drink'];
+                var size = post['size'] ? 'Large' : 'Medium';
+                var price = post['size'] ? docs[drink_id].large_price : docs[drink_id].medium_price;
+                var pearl_level = ICE_LEVEL[post['form_ice_level']];
+                var ice_level = PEARL_LEVEL[post['form_pearl_level']];
+                
+                var order = { 
+                    'fk_player_name' : 'person',
+                    'order_name' : docs[drink_id].name,
+                    'size' : size,
+                    'price' : price,
+                    'sugar_level' : ice_level,
+                    'ice_level' : pearl_level,
+                    'datetime' : new Date()
+                };
+                
+                orders.insert( order, { w : 1 }, function(err, document) {
+                    console.dir(document[0]);
+                    res.send('success');
+                });                  
+            });
+        });
+    });
     
 });  

@@ -8,12 +8,12 @@
 // Require Libraries
 
 module.exports = exports = function(server, mongodb) {
-
-    var getMac = require('getmac').getMac;    
+ 
     var WebSocketServer = require('ws').Server    
     var ChatAPI = require('./chatcommon.js');
     var WebMsgType = ChatAPI.WebMsgType;
     var WebMsg = ChatAPI.WebMsg;
+    var Dns = require('dns');
 
 
     var PlayerArray = new Array();
@@ -178,11 +178,47 @@ module.exports = exports = function(server, mongodb) {
     var wss = new WebSocketServer({server: server});
     console.log('Websocket listening on ' + server.address().port);
     
-    getMac( function(err, macAddress) {
-        if (err)  throw err;
-        console.log(macAddress);    
-    })                           
+    function authPlayer(ws, callback)
+    {
+        var user_addr = ws._socket.address().address;
+        // Find user based on ip and mac address
+        function findPlayer( hostname ) 
+        {            
+            var players = mongodb.collection("players");
+
+            players.findOne( {'_id' : user_addr}, function(err, document) {
+
+                console.dir(document);
+
+                if (!document) {
+                    console.log('Creating new user ' + user_addr + ' ' + hostname);
+
+                    players.update( { '_id' : user_addr }, {'_id' : user_addr, 'host' : hostname}, { upsert : true, w : 1 }, function(err, num_records) {
+
+                        if (err) {
+                            console.log(err);
+                            console.log('error in creating user ' + user_addr);
+                            return;
+                        }
+
+                        console.log('updated ' + num_records + ' records');                
+                    });                                              
+                }
+                else {
+                    console.log('Found user: ' + document._id);        
+                }
+                
+                callback(err);
+            });                        
+        }
+        findPlayer('localhost');
+        //Dns.reverse( user_addr, function(err, domains) {
+        //    console.dir(domains);
+        //    findPlayer(domains[0]); 
+        //});        
+    }
     
+                            
     function bindChatRoutes(ws)
     {
         ws.on('message', function(message) {
@@ -192,8 +228,10 @@ module.exports = exports = function(server, mongodb) {
                 var packet = JSON.parse(message);
 
                 if (packet.Type == WebMsgType.AUTH) {
-
-                    RegisterPlayer(packet.Data.SessionID, 'user', ws);
+                    console.log('registering player: ' + packet.Data.SessionID); 
+                    authPlayer(ws, function(err) {
+                        RegisterPlayer(packet.Data.SessionID, 'user', ws);
+                    });
                 }
                 else if (packet.Type == WebMsgType.CHAT) {
 
@@ -251,33 +289,7 @@ module.exports = exports = function(server, mongodb) {
         console.log(ws._socket.address());
         console.log(ws._socket.remoteAddress);
 
-        var user_addr = ws._socket.address().address;
-        // Find user based on ip and mac address
-        
-        var players = mongodb.collection("players");
-        
-        players.findOne( {'_id' : user_addr}, function(err, document) {
-            
-            console.dir(document);
-            
-            if (!document) {
-                console.log('Creating new user ' + user_addr);
-            
-                players.update( { '_id' : user_addr }, {'_id' : user_addr}, { upsert : true, w : 1 }, function(err, num_records) {
-                   
-                    if (err) {
-                        console.log(err);
-                        console.log('error in creating user ' + user_addr);
-                        return;
-                    }
-                    
-                    console.log('updated ' + num_records + ' records');                
-                });                                              
-            }
-            else {
-                bindChatRoutes(ws);        
-            }                                                      
-        });                        
+        bindChatRoutes(ws);                        
     }); // end wss.on
 
 } // end export
